@@ -37,10 +37,10 @@ interface RProps extends RouteProps {
       await fetch(localURL+'/dictionary/'+this.props.propsRouter.match.params.itemId)
             .then(response => response.json())
             .then(data => this.setState({words:data, show:true}))
-            .catch(error => this.setState({isLoad:error,errorLog:error}))
+            .catch(error => this.setState({isLoad:error,errorLog:error,show:false}))
     }
     public showWords = () =>{
-      return this.state.show == true ?
+      return this.state.show == true || this.state.words != undefined?
        this.state.words.map((e:any,i:any)=> <div key={i}><p>{e.wordsEnglish.words}<span>  </span>
        
       <Button circular basic color='blue' icon="volume up" onClick={()=> new Audio(e.wordsEnglish.audioUrl).play()}></Button>
@@ -49,7 +49,6 @@ interface RProps extends RouteProps {
     public componentDidMount(){ 
       this.getContent();
       this.getWords()
-      this.showWords(); 
     }
 
     public render() {
@@ -70,7 +69,7 @@ interface RProps extends RouteProps {
           <h4>Words</h4>
           {this.state.show == true ? this.showWords():'niema'}
           <Divider/>
-          {this.state.words[0] == null?'No Exercise':<Link to={this.props.propsRouter.match.url+'/'+this.state.words[0].id}>Exercise </Link> }
+          {this.state.words[0] == null?'No Exercise':<Link to={this.props.propsRouter.match.url+'/exercise'}>Exercise </Link> }
         </Segment>
       );
     }

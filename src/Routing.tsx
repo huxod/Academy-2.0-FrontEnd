@@ -28,7 +28,7 @@ import LessonExercise from "./Lesson/LessonExercise";
                 <Route exact path={'/lesson/:lessonId'}                         component={(e:any)=><Lesson                     propsRouter={e}/>}/>
                 <Route exact path={'/lesson/:lessonId/:itemId'}                 component={(e:any)=><LessonContent back={true}  propsRouter={e}/>}/>
                 <Route exact path={'/lesson/:lessonId/:itemId/edit'}            component={(e:any)=><LessonContentEdit          propsRouter={e}/>}/>
-                <Route exact path={'/lesson/:lessonId/:itemId/:wordId'}         component={(e:any)=><LessonExercise             propsRouter={e}/>}/>
+                <Route exact path={'/lesson/:lessonId/:itemId/exercise'}         component={(e:any)=><LessonExercise            propsRouter={e}/>}/>
                 <Route exact path={'/lesson/:lessonId/:itemId/edit/:contentId'} component={(e:any)=><LessonContentEdit          propsRouter={e}/>}/>
             </Switch>
         </Route>

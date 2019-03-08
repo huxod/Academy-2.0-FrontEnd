@@ -14,7 +14,7 @@ class SystemTool {
         let inputName = e.target.name
         let val = e.target.value;
         if( val == ''){
-       val='48f370a772c7496f6c9d2e6d92e920c87dd00a5c';
+        val='48f370a772c7496f6c9d2e6d92e920c87dd00a5c';
         }else{
         
         inputName == 'login' || inputName == 'email'?

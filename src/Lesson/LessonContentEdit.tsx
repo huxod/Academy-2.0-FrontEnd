@@ -54,15 +54,27 @@ interface RouterEditContentProps extends RouteProps {
     //Add Title
     public addFile = async (file:any,option:string) =>{
         this.addTitle(option)
-        let url;
-        if(option != 'words'){
-            url = "/uploadFile/"+this.props.propsRouter.match.params.itemId;
-        }else{
-            url = '/uploadAudio/'+this.dictionary.wordsEnglish.words
-        }
-        console.log("Check", file.name , url)
+        let url = "/uploadFile/"+this.props.propsRouter.match.params.itemId;
+
+        console.log("Check", file.name ," Check Option "+option, url)
+        const dataFile = new FormData(this.forms)
+        dataFile.append('Files',file)
+        await fetch(localURL+url, {
+            method: 'POST',
+            body: dataFile
+        }).catch(e => console.log(e.responseText));
+        this.getContent();
+        this.forceUpdate();
+        this.componentDidMount();
+    }
+
+    public addFileAudio = async (file:any,option:string) =>{
+        this.addTitle(option)
+        let url = '/uploadAudio/'+this.dictionary.wordsEnglish.words
+
+        console.log("Check", file.name ," Check Option "+option, url)
         const data = new FormData(this.forms)
-        data.append('file',file)
+        data.append('audioenglish',file)
         await fetch(localURL+url, {
             method: 'POST',
             body: data
@@ -72,12 +84,11 @@ interface RouterEditContentProps extends RouteProps {
         this.componentDidMount();
     }
     public addTitle = async (option:string) =>{
-       if( option == 'content'){
-        this.lessonContent.title = this.state.title
-        this.lessonContent.content = this.state.content
-        
-        lessonEditTool.saveLesoon(this.lessonContent,localURL+"/lessonItem/"+this.props.propsRouter.match.params.itemId)
-        console.log(this.state.title)}
+        if( option == 'content'){
+            this.lessonContent.title = this.state.title
+            this.lessonContent.content = this.state.content
+            lessonEditTool.saveLesoon(this.lessonContent,localURL+"/lessonItem/"+this.props.propsRouter.match.params.itemId)
+            console.log(this.state.title)}
         if( option == 'words'){
             this.dictionary.wordsEnglish.words = this.state.en
             this.dictionary.wordsPolish.words = this.state.pl
@@ -112,7 +123,7 @@ interface RouterEditContentProps extends RouteProps {
          <Input name="audioenglish" type="file" onChange={(e:any)=>this.setState({enAudio: e.target.files[0]})}/>
          <span> : </span>
          <Input name='polish' type="text"  onChange={(e:any)=>this.setState({pl:e.target.value})}/>
-         <Button onClick={()=>{this.addFile(this.state.enAudio,'words')}}>Add Words</Button> </div></div>)
+         <Button onClick={()=>{this.addFileAudio(this.state.enAudio,'words')}}>Add Words</Button> </div></div>)
       }
    
         
@@ -136,12 +147,12 @@ interface RouterEditContentProps extends RouteProps {
             <TextArea autoHeight placeholder='Add description of Lesson' onBlur={(e:any)=>this.setState({content:e.target.value})}/>
             </Form>
             <Divider />
-            <Input action={{ color: 'teal', labelPosition: 'right', icon: 'upload', content: 'Image Lesson' }}
-                type='file' onChange={(e)=>this.setValueFile(e)}/><p></p>
+            <Input 
+                type='file' name="Files" id="Files" onChange={(e:any)=>this.setValueFile(e)}/><p></p>
             <Button onClick={()=> this.addFile(this.state.file,'content')}>Add File</Button>
             <Divider />
             <h3>Add Words</h3>
-            {this.showWordsInput()}
+            {/* {this.showWordsInput()} */}
           <Button basic icon="back"onClick={this.context.router.history.goBack}> Back </Button>
         </Segment>
       );

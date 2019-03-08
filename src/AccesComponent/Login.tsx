@@ -37,17 +37,18 @@ export default class Login extends React.Component<any, any>{
         this.setState({ password: e.target.value });
         this.getValidationState(this.state.password);
     }
-    public submit = (e: any) => {
+    public submit = async(e: any) => {
     
         e.preventDefault();
         fetch(this.state.URL+'/role/'+this.state.username)
         .then(response => response.json())
         .then(data => Cookies.set('userRole',data))
-        .then(data => {this.setState({signin:true});return data}); 
+        .then(data => {this.setState({signin:true});return data})
+        
         Cookies.set('user',this.state.username); 
         
         const data = new FormData(this.forms)
-        fetch(this.forms.action, {
+        await fetch(this.forms.action, {
             method: 'POST',
             body: data
         }).catch(e => console.log(e.responseText));

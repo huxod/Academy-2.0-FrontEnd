@@ -39,7 +39,7 @@ export default class User extends React.Component<any,any> {
 
     fetch(localURL+'/users/'+Cookies.get('user'))
       .then(response => response.json())
-      .then(data => this.setState({ user: data, isLoad: false }))
+      .then(data => {this.setState({ user: data, isLoad: false });Cookies.set('Id',this.state.user.id);})
       .catch(error => this.setState({isLoad:error}));
   }
   //Update User Info
@@ -63,12 +63,14 @@ export default class User extends React.Component<any,any> {
     const data = await fetch(localURL+'/users/'+this.state.user.id, settings)
         .then(response => response.json())
         .then(json => {
+          Cookies.set('user',this.state.user.login);
+          
             return json;
         })
         .catch(e => {
             return e
         });
-        Cookies.set('user',this.state.user.login)
+
     return data;
 }
   //Test
@@ -152,6 +154,8 @@ export default class User extends React.Component<any,any> {
           </ListItem>
           <Divider />
           {Cookies.getJSON('userRole').map((ele:any,i:any)=> <h3 key={i}>{ele.role}</h3>)}
+          <Divider />
+          Id{Cookies.get('Id')}
           <Divider />
           <h3>Lesson Score: {this.state.user.lessonScore.dictionaries.length}</h3>
         </List>
