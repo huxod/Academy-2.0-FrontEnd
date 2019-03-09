@@ -1,4 +1,4 @@
-import * as React from 'react';
+/* import * as React from 'react';
 
 import { RouteProps } from 'react-router-dom';
 import { Segment } from 'semantic-ui-react';
@@ -22,4 +22,4 @@ interface RProps extends RouteProps {
          
       );
     }
-  }
+  } */
