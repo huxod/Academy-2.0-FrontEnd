@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.css';
 import 'semantic-ui-css/semantic.min.css';
-import 'bootstrap';
 import App from './App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
