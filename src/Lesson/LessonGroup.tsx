@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Segment, Input} from 'semantic-ui-react';
+import { Segment, Input, Button} from 'semantic-ui-react';
 import { Link, RouteProps} from 'react-router-dom';
 import lessonEditTool from './LessonEditTool'
 import {localURL} from '../config';
@@ -23,6 +23,9 @@ interface RouterLessonGroupProps extends RouteProps {
         isLoad:true,
 
       }
+    }
+    public back = (edit:boolean,buttonM:string) =>{
+      this.setState({edit:false, editValue:null,buttonM:'Edit Lesson Group'});
     }
     //Container Object LessonGroup
     public lessonGroup={
@@ -95,13 +98,19 @@ interface RouterLessonGroupProps extends RouteProps {
         <Segment>
           {this.state.lessonGroup.map((ele:any, i:any)=>
             (<Segment key={i}><h3 className="left">
-            {this.state.isEdit == true && ele.id == this.state.editValue ? (<Input name="lessonGroupTitle" defaultValue={ele.lessonGroupTitle} onChange={(e)=>this.setValue(e)}></Input>):
+            {this.state.isEdit == true && ele.id == this.state.editValue ? (<div>
+              <Button circular color='google plus' icon='delete' size={"mini"} 
+              style={{margin:'6px'}} onClick={() => this.back(this.state.isEdit,this.state.buttonMessage)}/>
+              <Input size={"mini"} name="lessonGroupTitle" defaultValue={ele.lessonGroupTitle} onChange={(e)=>this.setValue(e)}></Input>
+            </div>):
             (<Link to={this.props.propsRouter.match.url+'/'+ele.id} >{ele.lessonGroupTitle}</Link>)}</h3>
             {lessonEditTool.ifTeacher(this.state.buttonDeleteMessage,'delete',ele)}
             {this.state.isEdit !== true || ele.id == this.state.editValue ?
              lessonEditTool.ifTeacher(this.state.buttonEditMessage,'edit',ele):null}
             </Segment>))}
-          {this.state.isAdd === true ? <input name="lessonGroupTitle" onChange={(e)=>this.setValue(e)}></input>:null}
+          {this.state.isAdd === true ? <div><input name="lessonGroupTitle" onChange={(e)=>this.setValue(e)}></input>
+          <Button circular color='google plus' icon='delete' size={"mini"} 
+          style={{margin:'6px'}} onClick={() => this.back(this.state.isAdd,this.state.buttonMessage)}/></div>:null}
           {lessonEditTool.ifTeacher(this.state.buttonMessage,'save',null)}
         </Segment>
       );
