@@ -157,7 +157,8 @@ export default class User extends React.Component<any,any> {
           <Divider />
           Id{Cookies.get('Id')}
           <Divider />
-          <h3>Lesson Score: {this.state.user.lessonScore.dictionaries.length}</h3>
+          <h3>Lesson Score: {undefined == this.state.user.lessonScore ?
+            0: this.state.user.lessonScore.dictionaries.length}</h3>
         </List>
         
       </Segment>

@@ -24,8 +24,9 @@ interface RouterLessonGroupProps extends RouteProps {
 
       }
     }
-    public back = (edit:boolean,buttonM:string) =>{
-      this.setState({edit:false, editValue:null,buttonM:'Edit Lesson Group'});
+    public back = (option:string) =>{
+      option == 'add'  ? this.setState({ isAdd: false, buttonMessage: 'Add Lesson Group'})     :null;
+      option == 'edit' ? this.setState({ isEdit: false, editValue:null, buttonEditMessage: 'Edit Lesson Group'}):null;
     }
     //Container Object LessonGroup
     public lessonGroup={
@@ -100,7 +101,7 @@ interface RouterLessonGroupProps extends RouteProps {
             (<Segment key={i}><h3 className="left">
             {this.state.isEdit == true && ele.id == this.state.editValue ? (<div>
               <Button circular color='google plus' icon='delete' size={"mini"} 
-              style={{margin:'6px'}} onClick={() => this.back(this.state.isEdit,this.state.buttonMessage)}/>
+              style={{margin:'6px'}} onClick={() => this.back('edit')}/>
               <Input size={"mini"} name="lessonGroupTitle" defaultValue={ele.lessonGroupTitle} onChange={(e)=>this.setValue(e)}></Input>
             </div>):
             (<Link to={this.props.propsRouter.match.url+'/'+ele.id} >{ele.lessonGroupTitle}</Link>)}</h3>
@@ -110,7 +111,7 @@ interface RouterLessonGroupProps extends RouteProps {
             </Segment>))}
           {this.state.isAdd === true ? <div><input name="lessonGroupTitle" onChange={(e)=>this.setValue(e)}></input>
           <Button circular color='google plus' icon='delete' size={"mini"} 
-          style={{margin:'6px'}} onClick={() => this.back(this.state.isAdd,this.state.buttonMessage)}/></div>:null}
+          style={{margin:'6px'}} onClick={() => this.back('add')}/></div>:null}
           {lessonEditTool.ifTeacher(this.state.buttonMessage,'save',null)}
         </Segment>
       );

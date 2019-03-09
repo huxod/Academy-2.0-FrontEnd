@@ -33,14 +33,16 @@ class LessonEditTool {
     delete = function(e:any){};
     edit = function(e:any){};
     //Check user role
+    editButton = (buttonMessage: string) => {
+        Cookies.getJSON('userRole').map((ele: any, i: any) => ele.role === 'TEACHER' ?
+            (<Button size="mini" basic color='teal' key={i} onClick={(e: any) => this.save(e)}>{buttonMessage}</Button>) : true)
+    };
     ifTeacher = (buttonMessage:string,option:string,obj:any) =>{
-        
+
         if(option == 'save'){
-            return Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'TEACHER'?
-            (<Button  size="mini" basic color='teal' key={i}  onClick={(e) => this.save(e)}>{buttonMessage}</Button>):null)
+            return this.editButton(buttonMessage);
         }else if(option == 'delete'){
-            return Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'TEACHER'?
-            (<Button  size="mini" basic color='teal' key={i}  onClick={() => this.delete(obj.id)}>{buttonMessage}</Button>):null)
+            return this.editButton(buttonMessage);
         }else if(option == 'edit'){
             return Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'TEACHER'?
             (<Button  size="mini" basic color='teal' key={i}  onClick={() => this.edit(obj.id)}>{buttonMessage}</Button>):null)
