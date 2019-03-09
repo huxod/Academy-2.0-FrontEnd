@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RouteProps } from 'react-router-dom';
-import { Segment, Button, Input, Divider, TextArea, Form, Icon } from 'semantic-ui-react';
+import { Segment, Button, Input, Divider, TextArea, Form, Icon, Progress } from 'semantic-ui-react';
 import lessonEditTool from './LessonEditTool';
 import { localURL } from '../config'
 import LessonContent from './LessonContent';
@@ -24,6 +24,7 @@ export default class LessonContentEdit extends React.Component<RouterEditContent
             isLoad: true,
             file: null,
             title: '',
+            progres:0
         }
     }
     public fileInput:any;
@@ -63,7 +64,12 @@ export default class LessonContentEdit extends React.Component<RouterEditContent
         console.log("Check", file.name, " Check Option " + option, url)
         const data = new FormData(this.forms)
         data.append('Files', this.state.file)
-        Axios.post(localURL+url,data)
+        Axios.post(localURL+url,data,{
+            onUploadProgress: ProgressEvent =>{
+                console.log("Progres"+Math.round(ProgressEvent.loaded/ProgressEvent.total * 100))
+                this.setState({progres:Math.round(ProgressEvent.loaded/ProgressEvent.total * 100)})
+            }
+        })
 
         this.getContent();
         this.forceUpdate();
@@ -146,6 +152,7 @@ export default class LessonContentEdit extends React.Component<RouterEditContent
                     <TextArea autoHeight placeholder='Add description of Lesson' onBlur={(e: any) => this.setState({ content: e.target.value })} />
                 </Form>
                 <Divider />
+                <Progress progress='value' value={this.state.progres} total={100} />
                 <input style={{display:'none'}} ref={(e:any) => {this.fileInput  = e as HTMLInputElement}} type='file' name="Files" id="Files" onChange={(e: any) => this.setState({ file: e.target.files[0] })} /><p></p>
                 <Button onClick={()=> this.fileInput.click()}>Add File</Button>
                 <Button onClick={() => this.addFile(this.state.file, 'content')}><Icon name='paper plane outline'/>Upload File</Button>
