@@ -2,13 +2,20 @@ import * as Cookies from "js-cookie";
 
 class SystemTool {
     public ifLoged = () =>{
-        if("userRole" in Cookies.getJSON() &&  Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'USER'?true:false)){
+        if("userRole" in Cookies.getJSON()?Cookies.getJSON('userRole')
+        .map((ele:any,i:any)=> ele.role === 'USER'?true:false):false){
             return true
          }else {
             return false
         }
     }
-    
+    public ifAdmin = () =>{
+        if("userRole" in Cookies.getJSON() &&  Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'ADMIN'?true:false)){
+            return true
+         }else {
+            return false
+        }
+    }
     public onBlur = (e:any,URL:string,showMessage:any) =>{
         console.log("Value "+e.target.value );
         let inputName = e.target.name

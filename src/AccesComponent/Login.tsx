@@ -1,12 +1,9 @@
 import * as React from 'react';
-
-// import { Button, FormControl, FormGroup, FormB, Jumbotron } from 'react-bootstrap';
 import { Icon, Button, Segment, Form } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom';
 import * as Cookies from 'js-cookie';
 import systemTool from '../SystemTool';
-
-// This Component allows you to add and edit lessons
+import { localURL } from '../config';
 
 export default class Login extends React.Component<any, any>{
     constructor(props: any) {
@@ -14,64 +11,74 @@ export default class Login extends React.Component<any, any>{
         this.state = {
             username: '',
             password: '',
-            roles:[{}],
-            validstate: '',
-            signin:false,
-            // URL:  window.location.protocol+'//'+window.location.hostname+':'+ window.location.port
-            URL: 'http://localhost:8080'
+            roles: [{}],
+            validLogin: '',
+            validEmail: '',
+            valid: false,
+            signin: false,
+            URL: window.location.protocol + '//' + window.location.hostname + ':' + window.location.port
         }
     }
 
     public forms: any;
 
-
-
-    public getValidationState = (ele: any) => {
-        if (length == 0) this.setState({ validstate: true });
+    public validationsLogin = (ele: any) => {
+        if (ele >= 3) { this.setState({ validLogin: 'Your name is correct', valid: true }) }
+        else { this.setState({ validLogin: 'Your name to Short', valid: false }) };
+    }
+    public validationsEmail = (ele: any) => {
+        if (ele >= 9) { this.setState({ validEmail: 'Your password to short', valid: true }) }
+        else { this.setState({ validEmail: 'Your password is correct', valid: false }) };
     }
     public onChangeUsername = (e: any) => {
         this.setState({ username: e.target.value });
-        this.getValidationState(this.state.username);
+        this.validationsLogin(this.state.username.length);
     }
     public onChangePassword = (e: any) => {
         this.setState({ password: e.target.value });
-        this.getValidationState(this.state.password);
+        this.validationsEmail(this.state.password.length);
     }
-    public submit = async(e: any) => {
-    
+    public submit = async (e: any) => {
+        Cookies.set('user', this.state.username);
         e.preventDefault();
-        fetch(this.state.URL+'/role/'+this.state.username)
-        .then(response => response.json())
-        .then(data => Cookies.set('userRole',data))
-        .then(data => {this.setState({signin:true});return data})
-        
-        Cookies.set('user',this.state.username); 
-        
+
         const data = new FormData(this.forms)
         await fetch(this.forms.action, {
             method: 'POST',
             body: data
-        }).catch(e => console.log(e.responseText));
-  
-        this.setState({ username: '', password: '' ,signin:true});
+        }).then(e => {
+            console.log("Response: ", e.ok);
+            fetch(localURL + '/role/' + this.state.username)
+                .then(response => response.json())
+                .then(data => {
+                    Cookies.set('userRole', data);
+                    this.setState({ username: '', password: '', signin: true });
+                })
+                .then(data => { this.setState({ signin: true }); return data });
+        })
+            .catch(e => { console.log(e.responseText); this.setState({ validstate: 'login or email is not correct', signin: false }) });
+
     }
     public render() {
-
         return (
             <Segment>
-                <form className='ui form' method="POST" onSubmit={this.submit} ref={(el: any) => (this.forms = el as HTMLFormElement)}>
+                <form className='ui form' method="POST" onSubmit={this.submit}
+                    ref={(el: any) => (this.forms = el as HTMLFormElement)}>
                     <Form.Field>
-                        <input  placeholder='Login or Name' name='username' onChange={this.onChangeUsername} />
+                        <span>{this.state.validLogin}</span>
+                        <input placeholder='Login or Name' name='username' onChange={this.onChangeUsername} />
                     </Form.Field>
                     <Form.Field>
+                        <span>{this.state.validEmail}</span>
                         <input placeholder='Password' name='password' onChange={this.onChangePassword} />
                     </Form.Field>
                     <Button fluid color='green'><Icon name='user secret' />Login</Button>
                 </form>
-                {this.state.signin === true && systemTool.ifLoged()?<Redirect to="/user" />:null}
+                {this.state.signin === true && this.state.valid === true && systemTool.ifLoged() ? <Redirect to="/user" /> : null}
             </Segment>
         );
     }
 }
+
 
 

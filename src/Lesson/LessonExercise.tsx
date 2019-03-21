@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { RouteProps } from 'react-router-dom';
+import { RouteProps} from 'react-router-dom';
 import { localURL } from '../config';
-import { Segment, Input, Button } from 'semantic-ui-react';
+import { Segment, Input, Button, Icon } from 'semantic-ui-react';
 import lessonEditTool from './LessonEditTool';
 import * as Cookies from 'js-cookie';
 
@@ -9,6 +9,9 @@ interface RRProps extends RouteProps {
   propsRouter:any
 }
   export default class LessonExercise extends React.Component<RRProps,any,{}>{
+    static contextTypes = {
+      router: () => null// replace with PropTypes.object if you use them
+    }
     constructor(props:any){
       super(props)
       this.state = {
@@ -58,8 +61,10 @@ interface RRProps extends RouteProps {
       }
     return (
       <Segment>
-          {this.state.isLoad != false ? <div><h2>{this.state.words[this.state.count].wordsEnglish.words}</h2> 
+          {this.state.isLoad != false ? <div><h2>{this.state.words[this.state.count].wordsEnglish.words} 
+          <Button circular basic color='blue' icon="volume up" onClick={() => { new Audio(this.state.words[this.state.count].wordsEnglish.audioUrl).play() }}></Button></h2> 
           <Input onBlur={(e:any)=>this.changeValue(e)}  type="text" defaultValue={this.state.value} onChange={(e:any) => this.check(e)}/></div>:null}
+          <Button basic onClick={this.context.router.history.goBack}><Icon name='backward' /> Back </Button>
           {this.showButton()}
       </Segment>
       );

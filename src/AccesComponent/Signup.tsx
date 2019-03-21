@@ -47,7 +47,7 @@ export default class Signup extends React.Component<any, any>{
         usr.login == null || usr.email == null || usr.password == null ? console.log("Login or Email or Password: null"): 
         
         (async () => {
-            const response = await fetch(this.state.URL+'/users', {
+            const response = await fetch(this.state.URL+'/users-signup', {
                 method: 'POST',
                 headers: {'Accept': 'application/json','Content-Type': 'application/json'},
                 body: JSON.stringify(usr)})

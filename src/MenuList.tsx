@@ -32,6 +32,12 @@ export default class MenuList extends React.Component<{}, any> {
                                 />):null}
                         {SystemTool.ifLoged() ?(                       
                         <Menu.Menu position='right'>
+                            {SystemTool.ifAdmin() ?( 
+                            <Menu.Item
+                                    as={Link}
+                                    to='/users'
+                                    name='users'
+                                />):null}
                             <Menu.Item 
                                 as={Link}
                                 to='/user'

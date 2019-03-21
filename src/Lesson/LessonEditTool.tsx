@@ -1,9 +1,7 @@
 import * as Cookies from "js-cookie";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import * as React from "react";
-import {Link} from 'react-router-dom';
-
-
+import {Link} from 'react-router-dom';  
 
 class LessonEditTool {
         // Send Data
@@ -33,22 +31,20 @@ class LessonEditTool {
     delete = function(e:any){};
     edit = function(e:any){};
     //Check user role
-    editButton = (buttonMessage: string) => {
-        Cookies.getJSON('userRole').map((ele: any, i: any) => ele.role === 'TEACHER' ?
-            (<Button size="mini" basic color='teal' key={i} onClick={(e: any) => this.save(e)}>{buttonMessage}</Button>) : true)
-    };
     ifTeacher = (buttonMessage:string,option:string,obj:any) =>{
-
         if(option == 'save'){
-            return this.editButton(buttonMessage);
+            return Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'TEACHER'?
+            (<Button  size="mini" basic color='teal' key={i}  onClick={(e) => this.save(e)}>{buttonMessage}</Button>):null)
         }else if(option == 'delete'){
-            return this.editButton(buttonMessage);
+            return Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'TEACHER'?
+            (<Button  size="mini" basic color='red' key={i}  onClick={() => this.delete(obj.id)}>{buttonMessage}</Button>):null)
         }else if(option == 'edit'){
             return Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'TEACHER'?
             (<Button  size="mini" basic color='teal' key={i}  onClick={() => this.edit(obj.id)}>{buttonMessage}</Button>):null)
         }else if(option == 'check'){
             return Cookies.getJSON('userRole').map((ele:any,i:any)=> ele.role === 'TEACHER'?
-            <Link key={i} to={this.propsRouter.match.url+'/'+obj.id+'/edit/'+obj.lessonContent.id}><Button>{buttonMessage}</Button></Link> :null);
+            <Link key={i} to={this.propsRouter.match.url+'/'+obj.id+'/edit/'+obj.lessonContent.id}>
+            <Button size="mini" basic color='teal' icon={'edit'} content={buttonMessage}/></Link> :null);
         }else{
             return null
         }

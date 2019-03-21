@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteProps, Link } from 'react-router-dom';
 import { localURL } from '../config';
-import { Segment, Divider, Button } from 'semantic-ui-react';
+import { Segment, Divider, Button, List } from 'semantic-ui-react';
 
 
 
@@ -27,7 +27,7 @@ export default class LessonContent extends React.Component<RProps, any, {}>{
 
   //Get Lesson Content
   public getContent = async () => {
-    await fetch(localURL + '/lesson/' + this.props.propsRouter.match.params.lessonId + '/' + this.props.propsRouter.match.params.itemId)
+    await fetch(localURL + '/lesson-json/' + this.props.propsRouter.match.params.lessonId + '/' + this.props.propsRouter.match.params.itemId)
       .then(response => response.json())
       .catch(error => this.setState({ isLoad: error, errorLog: error }))
       .then(data => this.setState({ content: data, isLoad: false }))
@@ -41,10 +41,14 @@ export default class LessonContent extends React.Component<RProps, any, {}>{
   }
   public showWords = () => {
     return this.state.show == true || this.state.words != undefined ?
-      this.state.words.map((e: any, i: any) => <div key={i}><p>{e.wordsEnglish.words}<span>  </span>
+      this.state.words.map((e: any, i: any) =>
+        <List divided relaxed style={{ textAlign: 'left' }} key={i}><List.Item>{e.wordsEnglish.words}<span>  </span>
+          <Button circular basic color='blue' icon="volume up" onClick={() => { new Audio(e.wordsEnglish.audioUrl).play() }}></Button>
+          <span> : </span> {e.wordsPolish.words}
 
-        <Button circular basic color='blue' icon="volume up" onClick={() => new Audio(e.wordsEnglish.audioUrl).play()}></Button>
-        <span> : </span> {e.wordsPolish.words}</p></div>) : null
+        </List.Item>
+        </List>
+      ) : null
   }
   public componentDidMount() {
     this.getContent();

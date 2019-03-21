@@ -2,8 +2,6 @@ import * as React from 'react';
 import { RouteProps} from 'react-router-dom';
 import { Segment, Input, Button } from 'semantic-ui-react';
 
-
-
 interface RProps extends RouteProps{
   propsRouter:any
   words:any

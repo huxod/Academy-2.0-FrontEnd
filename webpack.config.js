@@ -5,7 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var config = {
   entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, 'dist-login'),
+    path: path.resolve(__dirname, 'webpack'),
     filename: 'bundle.js',
     publicPath: '/'
   },
